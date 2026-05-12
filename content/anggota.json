@@ -1,0 +1,82 @@
+{
+  "anggota": [
+    {
+      "id": "placeholder-sembalun-1",
+      "nama": "Nama Anggota",
+      "namaPanggilan": null,
+      "subUnit": "sembalun",
+      "fakultas": "Nama Fakultas",
+      "jurusan": "Nama Jurusan",
+      "angkatan": 2022,
+      "jabatan": "Koordinator Mahasiswa",
+      "fotoPath": null,
+      "bio": null,
+      "sosial": { "instagram": null, "linkedin": null, "email": null }
+    },
+    {
+      "id": "placeholder-sembalun-2",
+      "nama": "Nama Anggota",
+      "namaPanggilan": null,
+      "subUnit": "sembalun",
+      "fakultas": "Nama Fakultas",
+      "jurusan": "Nama Jurusan",
+      "angkatan": 2022,
+      "jabatan": null,
+      "fotoPath": null,
+      "bio": null,
+      "sosial": { "instagram": null, "linkedin": null, "email": null }
+    },
+    {
+      "id": "placeholder-sembalun-3",
+      "nama": "Nama Anggota",
+      "namaPanggilan": null,
+      "subUnit": "sembalun",
+      "fakultas": "Nama Fakultas",
+      "jurusan": "Nama Jurusan",
+      "angkatan": 2022,
+      "jabatan": null,
+      "fotoPath": null,
+      "bio": null,
+      "sosial": { "instagram": null, "linkedin": null, "email": null }
+    },
+    {
+      "id": "placeholder-sajang-1",
+      "nama": "Nama Anggota",
+      "namaPanggilan": null,
+      "subUnit": "sajang",
+      "fakultas": "Nama Fakultas",
+      "jurusan": "Nama Jurusan",
+      "angkatan": 2022,
+      "jabatan": "Koordinator Mahasiswa",
+      "fotoPath": null,
+      "bio": null,
+      "sosial": { "instagram": null, "linkedin": null, "email": null }
+    },
+    {
+      "id": "placeholder-sajang-2",
+      "nama": "Nama Anggota",
+      "namaPanggilan": null,
+      "subUnit": "sajang",
+      "fakultas": "Nama Fakultas",
+      "jurusan": "Nama Jurusan",
+      "angkatan": 2022,
+      "jabatan": null,
+      "fotoPath": null,
+      "bio": null,
+      "sosial": { "instagram": null, "linkedin": null, "email": null }
+    },
+    {
+      "id": "placeholder-sajang-3",
+      "nama": "Nama Anggota",
+      "namaPanggilan": null,
+      "subUnit": "sajang",
+      "fakultas": "Nama Fakultas",
+      "jurusan": "Nama Jurusan",
+      "angkatan": 2022,
+      "jabatan": null,
+      "fotoPath": null,
+      "bio": null,
+      "sosial": { "instagram": null, "linkedin": null, "email": null }
+    }
+  ]
+}

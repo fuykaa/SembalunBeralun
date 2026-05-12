@@ -46,9 +46,29 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Brand colors KKN Sembalun Beralun */
+  --color-hijau-sembalun: var(--hijau-sembalun);
+  --color-biru-sembalun: var(--biru-sembalun);
+  --color-jingga-sembalun: var(--jingga-sembalun);
+  --color-kuning-sembalun: var(--kuning-sembalun);
 }
 
 :root {
+  /* Brand colors */
+  --hijau-sembalun: #96C585;
+  --biru-sembalun: #ADE0DD;
+  --jingga-sembalun: #F5B383;
+  --kuning-sembalun: #FBD884;
+
+  /* Brand gradients */
+  --gradien-hijau-jingga: radial-gradient(circle, #96C585, #F5B383);
+  --gradien-hijau-biru: radial-gradient(circle, #96C585, #ADE0DD);
+  --gradien-hijau-kuning: radial-gradient(circle, #96C585, #FBD884);
+  --gradien-biru-jingga: radial-gradient(circle, #ADE0DD, #F5B383);
+  --gradien-biru-kuning: radial-gradient(circle, #ADE0DD, #FBD884);
+  --gradien-jingga-kuning: radial-gradient(circle, #F5B383, #FBD884);
+
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
