@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { supabase } from "@/lib/supabase/client"
+import { createAdminClient } from "@/lib/supabase/admin"
 import type { Proker } from "@/lib/supabase/types"
 
 export const metadata: Metadata = {
@@ -71,6 +71,7 @@ function KartuProker({ item }: { item: Proker }) {
 }
 
 export default async function ProkerPage() {
+  const supabase = createAdminClient()
   const { data: proker } = await supabase
     .from("proker")
     .select("*")

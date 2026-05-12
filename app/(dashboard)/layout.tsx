@@ -1,5 +1,8 @@
 import Link from "next/link"
-import { LayoutDashboard, Users, ClipboardList, ExternalLink } from "lucide-react"
+import { redirect } from "next/navigation"
+import { LayoutDashboard, Users, ClipboardList, ExternalLink, LogOut } from "lucide-react"
+import { createClient } from "@/lib/supabase/server"
+import { Button } from "@/components/ui/button"
 
 const navLinks = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
@@ -7,7 +10,19 @@ const navLinks = [
   { href: "/dashboard/proker", label: "Program Kerja", icon: ClipboardList },
 ]
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+async function signOut() {
+  "use server"
+  const supabase = await createClient()
+  await supabase.auth.signOut()
+  redirect("/login")
+}
+
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  const displayName = user?.user_metadata?.full_name ?? user?.email ?? "Pengguna"
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-50 border-b border-border bg-background">
@@ -29,12 +44,25 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               ))}
             </nav>
           </div>
-          <Link
-            href="/"
-            className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
-          >
-            Lihat Website <ExternalLink className="size-3" />
-          </Link>
+
+          <div className="flex items-center gap-3">
+            <Link
+              href="/"
+              className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+            >
+              Lihat Website <ExternalLink className="size-3" />
+            </Link>
+            <div className="h-4 w-px bg-border" />
+            <span className="max-w-[160px] truncate text-xs text-muted-foreground">
+              {displayName}
+            </span>
+            <form action={signOut}>
+              <Button type="submit" variant="ghost" size="xs" className="gap-1.5 text-muted-foreground">
+                <LogOut className="size-3.5" />
+                Keluar
+              </Button>
+            </form>
+          </div>
         </div>
       </header>
       <main className="flex-1 bg-muted/30">

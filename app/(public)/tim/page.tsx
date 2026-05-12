@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import { supabase } from "@/lib/supabase/client"
+import { createAdminClient } from "@/lib/supabase/admin"
 import type { Anggota } from "@/lib/supabase/types"
 
 export const metadata: Metadata = {
@@ -90,6 +90,7 @@ function KartuAnggota({ anggota }: { anggota: Anggota }) {
 }
 
 export default async function TimPage() {
+  const supabase = createAdminClient()
   const { data: anggota } = await supabase
     .from("anggota")
     .select("*")
