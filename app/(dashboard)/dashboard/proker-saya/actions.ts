@@ -5,14 +5,14 @@ import { getCurrentAnggota } from "@/lib/supabase/get-current-anggota"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
-async function getAnggotaOrThrow() {
-  const anggota = await getCurrentAnggota()
-  if (!anggota) throw new Error("Profil belum diklaim.")
-  return anggota
+function errRedirect(path: string, msg: string): never {
+  redirect(path + "?error=" + encodeURIComponent(msg))
 }
 
 export async function tambahProkerSaya(formData: FormData) {
-  const anggota = await getAnggotaOrThrow()
+  const anggota = await getCurrentAnggota()
+  if (!anggota) errRedirect("/dashboard/proker-saya/tambah", "Profil belum diklaim.")
+
   const supabase = createAdminClient()
 
   const { error } = await supabase.from("proker_anggota").insert({
@@ -23,15 +23,17 @@ export async function tambahProkerSaya(formData: FormData) {
     status: String(formData.get("status")),
   })
 
-  if (error) throw new Error(error.message)
+  if (error) errRedirect("/dashboard/proker-saya/tambah", error.message)
 
   revalidatePath("/tim")
   revalidatePath("/dashboard/proker-saya")
-  redirect("/dashboard/proker-saya")
+  redirect("/dashboard/proker-saya?success=1")
 }
 
 export async function editProkerSaya(id: string, formData: FormData) {
-  const anggota = await getAnggotaOrThrow()
+  const anggota = await getCurrentAnggota()
+  if (!anggota) errRedirect("/dashboard/proker-saya", "Profil belum diklaim.")
+
   const supabase = createAdminClient()
 
   const { data: existing } = await supabase
@@ -40,7 +42,9 @@ export async function editProkerSaya(id: string, formData: FormData) {
     .eq("id", id)
     .single()
 
-  if (existing?.anggota_id !== anggota.id) throw new Error("Tidak diizinkan.")
+  if (existing?.anggota_id !== anggota.id) {
+    errRedirect("/dashboard/proker-saya", "Tidak diizinkan.")
+  }
 
   const { error } = await supabase
     .from("proker_anggota")
@@ -52,15 +56,17 @@ export async function editProkerSaya(id: string, formData: FormData) {
     })
     .eq("id", id)
 
-  if (error) throw new Error(error.message)
+  if (error) errRedirect(`/dashboard/proker-saya/${id}/edit`, error.message)
 
   revalidatePath("/tim")
   revalidatePath("/dashboard/proker-saya")
-  redirect("/dashboard/proker-saya")
+  redirect("/dashboard/proker-saya?success=1")
 }
 
 export async function hapusProkerSaya(formData: FormData) {
-  const anggota = await getAnggotaOrThrow()
+  const anggota = await getCurrentAnggota()
+  if (!anggota) errRedirect("/dashboard/proker-saya", "Profil belum diklaim.")
+
   const supabase = createAdminClient()
   const id = String(formData.get("id"))
 
@@ -70,10 +76,12 @@ export async function hapusProkerSaya(formData: FormData) {
     .eq("id", id)
     .single()
 
-  if (existing?.anggota_id !== anggota.id) throw new Error("Tidak diizinkan.")
+  if (existing?.anggota_id !== anggota.id) {
+    errRedirect("/dashboard/proker-saya", "Tidak diizinkan.")
+  }
 
   const { error } = await supabase.from("proker_anggota").delete().eq("id", id)
-  if (error) throw new Error(error.message)
+  if (error) errRedirect("/dashboard/proker-saya", error.message)
 
   revalidatePath("/tim")
   revalidatePath("/dashboard/proker-saya")

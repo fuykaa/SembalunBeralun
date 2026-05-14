@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/server"
 import { getCurrentAnggota } from "@/lib/supabase/get-current-anggota"
 import { Button } from "@/components/ui/button"
 import { FotoProfilInput } from "@/components/dashboard/foto-profil-input"
+import { SubmitButton } from "@/components/dashboard/submit-button"
+import { FormAlert } from "@/components/dashboard/form-alert"
 import { updateProfil } from "./actions"
 
 const input =
@@ -38,10 +40,12 @@ export default async function ProfilPage() {
   return (
     <div className="max-w-2xl">
       <h1 className="mb-2 text-2xl font-bold tracking-tight text-foreground">Profil Saya</h1>
-      <p className="mb-6 text-sm text-muted-foreground">
+      <p className="mb-4 text-sm text-muted-foreground">
         Halo, <strong>{anggota.nama}</strong>. Kamu bisa mengubah info di bawah ini.
         Data struktural (nama lengkap, sub-unit, fakultas) hanya bisa diubah oleh admin.
       </p>
+
+      <FormAlert successText="Profil berhasil disimpan." />
 
       <div className="mb-6 rounded-xl border border-border bg-muted/30 px-4 py-3 text-sm">
         <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-muted-foreground">
@@ -121,7 +125,7 @@ export default async function ProfilPage() {
         </div>
 
         <div className="flex gap-3 pt-2">
-          <Button type="submit">Simpan Perubahan</Button>
+          <SubmitButton>Simpan Perubahan</SubmitButton>
         </div>
       </form>
     </div>

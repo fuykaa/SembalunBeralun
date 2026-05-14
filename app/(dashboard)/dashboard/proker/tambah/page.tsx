@@ -2,6 +2,8 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import { isAdmin } from "@/lib/supabase/get-current-anggota"
 import { Button } from "@/components/ui/button"
+import { SubmitButton } from "@/components/dashboard/submit-button"
+import { FormAlert } from "@/components/dashboard/form-alert"
 import { tambahProker } from "../actions"
 
 const input = "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
@@ -17,6 +19,8 @@ export default async function TambahProkerPage() {
         </Button>
         <h1 className="text-2xl font-bold tracking-tight text-foreground">Tambah Program Kerja</h1>
       </div>
+
+      <FormAlert />
 
       <form action={tambahProker} className="flex flex-col gap-5 rounded-xl border border-border bg-background p-6">
         <div>
@@ -60,7 +64,7 @@ export default async function TambahProkerPage() {
         </div>
 
         <div className="flex gap-3 pt-2">
-          <Button type="submit">Simpan Program Kerja</Button>
+          <SubmitButton>Simpan Program Kerja</SubmitButton>
           <Button asChild variant="outline">
             <Link href="/dashboard/proker">Batal</Link>
           </Button>

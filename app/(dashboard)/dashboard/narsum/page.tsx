@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server"
 import { getCurrentAnggota, isAdmin } from "@/lib/supabase/get-current-anggota"
 import { Button } from "@/components/ui/button"
 import { DeleteButton } from "@/components/dashboard/delete-button"
+import { FormAlert } from "@/components/dashboard/form-alert"
 import { NarsumFilter } from "@/components/dashboard/narsum-filter"
 import { hapusLog } from "./actions"
 
@@ -52,6 +53,7 @@ export default async function NarsumPage({
 
   return (
     <div>
+      <FormAlert successText="Log narasumber berhasil disimpan." />
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold tracking-tight text-foreground">Log Narasumber</h1>
         <Button asChild size="sm">

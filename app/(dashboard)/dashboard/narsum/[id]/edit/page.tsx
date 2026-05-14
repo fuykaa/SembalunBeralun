@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/server"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { isAdmin } from "@/lib/supabase/get-current-anggota"
 import { Button } from "@/components/ui/button"
+import { SubmitButton } from "@/components/dashboard/submit-button"
+import { FormAlert } from "@/components/dashboard/form-alert"
 import { editLog } from "../../actions"
 
 const input =
@@ -32,6 +34,8 @@ export default async function EditLogPage({ params }: { params: Promise<{ id: st
         </Button>
         <h1 className="text-2xl font-bold tracking-tight text-foreground">Edit Log Narasumber</h1>
       </div>
+
+      <FormAlert />
 
       <form action={action} className="flex flex-col gap-5 rounded-xl border border-border bg-background p-6">
         <div className="grid gap-5 sm:grid-cols-2">
@@ -88,7 +92,7 @@ export default async function EditLogPage({ params }: { params: Promise<{ id: st
         </div>
 
         <div className="flex gap-3 pt-2">
-          <Button type="submit">Simpan Perubahan</Button>
+          <SubmitButton>Simpan Perubahan</SubmitButton>
           <Button asChild variant="outline">
             <Link href="/dashboard/narsum">Batal</Link>
           </Button>

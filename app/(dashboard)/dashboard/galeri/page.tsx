@@ -5,7 +5,9 @@ import { createClient } from "@/lib/supabase/server"
 import { isAdmin } from "@/lib/supabase/get-current-anggota"
 import { Button } from "@/components/ui/button"
 import { DeleteButton } from "@/components/dashboard/delete-button"
-import { hapusFoto } from "./actions"
+import { FormAlert } from "@/components/dashboard/form-alert"
+import { hapusFoto, toggleFeatured } from "./actions"
+import { StarButton } from "@/components/dashboard/star-button"
 
 export default async function GaleriDashboardPage() {
   const [authClient, admin] = await Promise.all([createClient(), isAdmin()])
@@ -18,10 +20,12 @@ export default async function GaleriDashboardPage() {
     .from("galeri")
     .select("*")
     .eq("tipe", "tim")
+    .order("is_featured", { ascending: false })
     .order("created_at", { ascending: false })
 
   return (
     <div>
+      <FormAlert successText="Foto berhasil diupload." />
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold tracking-tight text-foreground">Galeri Tim</h1>
         <Button asChild size="sm">
@@ -36,7 +40,7 @@ export default async function GaleriDashboardPage() {
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {fotos.map((foto) => {
-            const canDelete = admin || foto.created_by === user?.id
+            const canAct = admin || foto.created_by === user?.id
             return (
               <div
                 key={foto.id}
@@ -66,13 +70,23 @@ export default async function GaleriDashboardPage() {
                       </span>
                     )}
                   </div>
-                  {canDelete && (
-                    <DeleteButton
-                      action={hapusFoto}
-                      id={foto.id}
-                      label={foto.keterangan ?? foto.alt}
-                    />
-                  )}
+                  <div className="flex shrink-0 items-center gap-1">
+                    {admin && (
+                      <StarButton id={foto.id} isFeatured={foto.is_featured ?? false} action={toggleFeatured} />
+                    )}
+                    {canAct && (
+                      <div className="flex shrink-0 flex-col gap-1">
+                        <Button asChild variant="outline" size="xs">
+                          <Link href={`/dashboard/galeri/${foto.id}/edit`}>Edit</Link>
+                        </Button>
+                        <DeleteButton
+                          action={hapusFoto}
+                          id={foto.id}
+                          label={foto.keterangan ?? foto.alt}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             )

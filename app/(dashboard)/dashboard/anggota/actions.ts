@@ -23,11 +23,18 @@ function extractStoragePath(url: string): string | null {
   return idx === -1 ? null : url.slice(idx + marker.length)
 }
 
-async function uploadFotoProfil(file: File, oldUrl?: string | null): Promise<string> {
+function errRedirect(path: string, msg: string): never {
+  redirect(path + "?error=" + encodeURIComponent(msg))
+}
+
+async function uploadFotoProfil(
+  file: File,
+  oldUrl?: string | null
+): Promise<{ url: string } | { error: string }> {
   if (!(file.type in ALLOWED_FOTO_TYPES)) {
-    throw new Error("Format tidak didukung. Gunakan JPEG, PNG, WebP, atau GIF.")
+    return { error: "Format tidak didukung. Gunakan JPEG, PNG, WebP, atau GIF." }
   }
-  if (file.size > 5 * 1024 * 1024) throw new Error("Ukuran foto maksimal 5 MB.")
+  if (file.size > 5 * 1024 * 1024) return { error: "Ukuran foto maksimal 5 MB." }
 
   const supabase = createAdminClient()
 
@@ -42,21 +49,26 @@ async function uploadFotoProfil(file: File, oldUrl?: string | null): Promise<str
   const { error: uploadError } = await supabase.storage
     .from("galeri")
     .upload(storagePath, compressed, { contentType })
-  if (uploadError) throw new Error(uploadError.message)
+  if (uploadError) return { error: uploadError.message }
 
-  const { data: { publicUrl } } = supabase.storage.from("galeri").getPublicUrl(storagePath)
-  return publicUrl
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from("galeri").getPublicUrl(storagePath)
+  return { url: publicUrl }
 }
 
 export async function tambahAnggota(formData: FormData) {
-  if (!(await isAdmin())) throw new Error("Tidak diizinkan.")
+  if (!(await isAdmin())) redirect("/dashboard")
 
   const supabase = createAdminClient()
+  const errPath = "/dashboard/anggota/tambah"
 
   const file = formData.get("foto") as File | null
   let fotoUrl: string | null = null
   if (file && file.size > 0) {
-    fotoUrl = await uploadFotoProfil(file)
+    const result = await uploadFotoProfil(file)
+    if ("error" in result) errRedirect(errPath, result.error)
+    fotoUrl = result.url
   }
 
   const { error } = await supabase.from("anggota").insert({
@@ -75,17 +87,18 @@ export async function tambahAnggota(formData: FormData) {
     email: nullable(formData.get("email")),
   })
 
-  if (error) throw new Error(error.message)
+  if (error) errRedirect(errPath, error.message)
 
   revalidatePath("/tim")
   revalidatePath("/dashboard/anggota")
-  redirect("/dashboard/anggota")
+  redirect("/dashboard/anggota?success=1")
 }
 
 export async function editAnggota(id: string, formData: FormData) {
-  if (!(await isAdmin())) throw new Error("Tidak diizinkan.")
+  if (!(await isAdmin())) redirect("/dashboard/profil")
 
   const supabase = createAdminClient()
+  const errPath = `/dashboard/anggota/${id}/edit`
 
   const { data: existing } = await supabase
     .from("anggota")
@@ -96,7 +109,9 @@ export async function editAnggota(id: string, formData: FormData) {
   const file = formData.get("foto") as File | null
   let fotoUrl: string | null = existing?.foto_path ?? null
   if (file && file.size > 0) {
-    fotoUrl = await uploadFotoProfil(file, existing?.foto_path)
+    const result = await uploadFotoProfil(file, existing?.foto_path)
+    if ("error" in result) errRedirect(errPath, result.error)
+    fotoUrl = result.url
   }
 
   const { error } = await supabase
@@ -117,15 +132,15 @@ export async function editAnggota(id: string, formData: FormData) {
     })
     .eq("id", id)
 
-  if (error) throw new Error(error.message)
+  if (error) errRedirect(errPath, error.message)
 
   revalidatePath("/tim")
   revalidatePath("/dashboard/anggota")
-  redirect("/dashboard/anggota")
+  redirect("/dashboard/anggota?success=1")
 }
 
 export async function hapusAnggota(formData: FormData) {
-  if (!(await isAdmin())) throw new Error("Tidak diizinkan.")
+  if (!(await isAdmin())) redirect("/dashboard")
 
   const supabase = createAdminClient()
   const id = String(formData.get("id"))
@@ -142,7 +157,7 @@ export async function hapusAnggota(formData: FormData) {
   }
 
   const { error } = await supabase.from("anggota").delete().eq("id", id)
-  if (error) throw new Error(error.message)
+  if (error) errRedirect("/dashboard/anggota", error.message)
 
   revalidatePath("/tim")
   revalidatePath("/dashboard/anggota")

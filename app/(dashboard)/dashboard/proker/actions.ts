@@ -5,8 +5,12 @@ import { isAdmin } from "@/lib/supabase/get-current-anggota"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
+function errRedirect(path: string, msg: string): never {
+  redirect(path + "?error=" + encodeURIComponent(msg))
+}
+
 export async function tambahProker(formData: FormData) {
-  if (!(await isAdmin())) throw new Error("Tidak diizinkan.")
+  if (!(await isAdmin())) redirect("/dashboard")
 
   const supabase = createAdminClient()
 
@@ -19,15 +23,15 @@ export async function tambahProker(formData: FormData) {
     status: String(formData.get("status")),
   })
 
-  if (error) throw new Error(error.message)
+  if (error) errRedirect("/dashboard/proker/tambah", error.message)
 
   revalidatePath("/proker")
   revalidatePath("/dashboard/proker")
-  redirect("/dashboard/proker")
+  redirect("/dashboard/proker?success=1")
 }
 
 export async function editProker(id: string, formData: FormData) {
-  if (!(await isAdmin())) throw new Error("Tidak diizinkan.")
+  if (!(await isAdmin())) redirect("/dashboard")
 
   const supabase = createAdminClient()
 
@@ -42,21 +46,21 @@ export async function editProker(id: string, formData: FormData) {
     })
     .eq("id", id)
 
-  if (error) throw new Error(error.message)
+  if (error) errRedirect(`/dashboard/proker/${id}/edit`, error.message)
 
   revalidatePath("/proker")
   revalidatePath("/dashboard/proker")
-  redirect("/dashboard/proker")
+  redirect("/dashboard/proker?success=1")
 }
 
 export async function hapusProker(formData: FormData) {
-  if (!(await isAdmin())) throw new Error("Tidak diizinkan.")
+  if (!(await isAdmin())) redirect("/dashboard")
 
   const supabase = createAdminClient()
   const id = String(formData.get("id"))
 
   const { error } = await supabase.from("proker").delete().eq("id", id)
-  if (error) throw new Error(error.message)
+  if (error) errRedirect("/dashboard/proker", error.message)
 
   revalidatePath("/proker")
   revalidatePath("/dashboard/proker")

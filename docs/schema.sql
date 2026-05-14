@@ -73,6 +73,7 @@ CREATE TABLE galeri (
   keterangan   TEXT,
   kategori     TEXT,                       -- untuk galeri tim: sembalun/sajang/bersama
   tipe         TEXT NOT NULL DEFAULT 'tim' CHECK (tipe IN ('tim', 'desa')),
+  is_featured  BOOLEAN NOT NULL DEFAULT FALSE, -- foto berbintang tampil duluan di /galeri
   created_by   UUID,                       -- auth.uid() uploader
   created_at   TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

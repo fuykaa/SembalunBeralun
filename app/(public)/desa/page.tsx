@@ -21,6 +21,7 @@ export default async function DesaPage() {
     .from("galeri")
     .select("id, url, alt, keterangan")
     .eq("tipe", "desa")
+    .order("is_featured", { ascending: false })
     .order("created_at", { ascending: false })
 
   const daftarFoto = fotos ?? []

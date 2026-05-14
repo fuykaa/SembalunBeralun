@@ -1,5 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { SubmitButton } from "@/components/dashboard/submit-button"
+import { FormAlert } from "@/components/dashboard/form-alert"
 import { tambahLog } from "../actions"
 
 const input =
@@ -15,6 +17,8 @@ export default function TambahLogPage() {
         </Button>
         <h1 className="text-2xl font-bold tracking-tight text-foreground">Tambah Log Narasumber</h1>
       </div>
+
+      <FormAlert />
 
       <form action={tambahLog} className="flex flex-col gap-5 rounded-xl border border-border bg-background p-6">
         <div className="grid gap-5 sm:grid-cols-2">
@@ -71,7 +75,7 @@ export default function TambahLogPage() {
         </div>
 
         <div className="flex gap-3 pt-2">
-          <Button type="submit">Simpan Log</Button>
+          <SubmitButton>Simpan Log</SubmitButton>
           <Button asChild variant="outline">
             <Link href="/dashboard/narsum">Batal</Link>
           </Button>

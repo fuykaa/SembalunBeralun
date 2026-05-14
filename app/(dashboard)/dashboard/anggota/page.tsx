@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin"
 import { isAdmin } from "@/lib/supabase/get-current-anggota"
 import { Button } from "@/components/ui/button"
 import { DeleteButton } from "@/components/dashboard/delete-button"
+import { FormAlert } from "@/components/dashboard/form-alert"
 import { hapusAnggota } from "./actions"
 
 export default async function AnggotaPage() {
@@ -15,6 +16,7 @@ export default async function AnggotaPage() {
 
   return (
     <div>
+      <FormAlert successText="Data anggota berhasil disimpan." />
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold tracking-tight text-foreground">Anggota</h1>
         {admin && (

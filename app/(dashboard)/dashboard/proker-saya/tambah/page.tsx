@@ -3,6 +3,8 @@ import { redirect } from "next/navigation"
 import { getCurrentAnggota } from "@/lib/supabase/get-current-anggota"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { Button } from "@/components/ui/button"
+import { SubmitButton } from "@/components/dashboard/submit-button"
+import { FormAlert } from "@/components/dashboard/form-alert"
 import { tambahProkerSaya } from "../actions"
 
 const input =
@@ -29,6 +31,8 @@ export default async function TambahProkerSayaPage() {
         </Button>
         <h1 className="text-2xl font-bold tracking-tight text-foreground">Tambah Proker</h1>
       </div>
+
+      <FormAlert />
 
       <form
         action={tambahProkerSaya}
@@ -71,7 +75,7 @@ export default async function TambahProkerSayaPage() {
         </div>
 
         <div className="flex gap-3 pt-2">
-          <Button type="submit">Simpan</Button>
+          <SubmitButton>Simpan</SubmitButton>
           <Button asChild variant="outline">
             <Link href="/dashboard/proker-saya">Batal</Link>
           </Button>

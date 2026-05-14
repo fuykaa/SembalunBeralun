@@ -4,7 +4,9 @@ import { createAdminClient } from "@/lib/supabase/admin"
 import { isAdmin } from "@/lib/supabase/get-current-anggota"
 import { Button } from "@/components/ui/button"
 import { DeleteButton } from "@/components/dashboard/delete-button"
-import { hapusFotoDesa } from "./actions"
+import { FormAlert } from "@/components/dashboard/form-alert"
+import { hapusFotoDesa, toggleFeaturedDesa } from "./actions"
+import { StarButton } from "@/components/dashboard/star-button"
 
 export default async function GaleriDesaDashboardPage() {
   const [supabase, admin] = [createAdminClient(), await isAdmin()]
@@ -12,10 +14,12 @@ export default async function GaleriDesaDashboardPage() {
     .from("galeri")
     .select("*")
     .eq("tipe", "desa")
+    .order("is_featured", { ascending: false })
     .order("created_at", { ascending: false })
 
   return (
     <div>
+      <FormAlert successText="Foto desa berhasil diupload." />
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold tracking-tight text-foreground">Galeri Desa</h1>
         <Button asChild size="sm">
@@ -25,7 +29,7 @@ export default async function GaleriDesaDashboardPage() {
 
       <p className="mb-6 text-sm text-muted-foreground">
         Foto daya tarik desa yang ditampilkan di halaman publik <strong>/desa</strong>.
-        Semua anggota bisa upload; hanya admin yang bisa hapus.
+        Semua anggota bisa upload; hanya admin yang bisa edit dan hapus.
       </p>
 
       {!fotos || fotos.length === 0 ? (
@@ -56,11 +60,19 @@ export default async function GaleriDesaDashboardPage() {
                   )}
                 </div>
                 {admin && (
-                  <DeleteButton
-                    action={hapusFotoDesa}
-                    id={foto.id}
-                    label={foto.keterangan ?? foto.alt}
-                  />
+                  <div className="flex shrink-0 items-center gap-1">
+                    <StarButton id={foto.id} isFeatured={foto.is_featured ?? false} action={toggleFeaturedDesa} />
+                    <div className="flex shrink-0 flex-col gap-1">
+                      <Button asChild variant="outline" size="xs">
+                        <Link href={`/dashboard/galeri-desa/${foto.id}/edit`}>Edit</Link>
+                      </Button>
+                      <DeleteButton
+                        action={hapusFotoDesa}
+                        id={foto.id}
+                        label={foto.keterangan ?? foto.alt}
+                      />
+                    </div>
+                  </div>
                 )}
               </div>
             </div>

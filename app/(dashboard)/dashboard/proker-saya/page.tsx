@@ -3,6 +3,7 @@ import { getCurrentAnggota } from "@/lib/supabase/get-current-anggota"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { Button } from "@/components/ui/button"
 import { DeleteButton } from "@/components/dashboard/delete-button"
+import { FormAlert } from "@/components/dashboard/form-alert"
 import { hapusProkerSaya } from "./actions"
 
 const pilarLabel: Record<string, string> = {
@@ -44,6 +45,7 @@ export default async function ProkerSayaPage() {
 
   return (
     <div>
+      <FormAlert successText="Proker berhasil disimpan." />
       <div className="mb-2 flex items-center justify-between">
         <h1 className="text-2xl font-bold tracking-tight text-foreground">Proker Saya</h1>
         {(!proker || proker.length < 5) && (

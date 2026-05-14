@@ -1,6 +1,16 @@
 "use client"
 
+import { useFormStatus } from "react-dom"
 import { Button } from "@/components/ui/button"
+
+function DeleteSubmitButton() {
+  const { pending } = useFormStatus()
+  return (
+    <Button type="submit" variant="destructive" size="xs" disabled={pending}>
+      {pending ? "..." : "Hapus"}
+    </Button>
+  )
+}
 
 export function DeleteButton({
   action,
@@ -19,9 +29,7 @@ export function DeleteButton({
       }}
     >
       <input type="hidden" name="id" value={id} />
-      <Button type="submit" variant="destructive" size="xs">
-        Hapus
-      </Button>
+      <DeleteSubmitButton />
     </form>
   )
 }

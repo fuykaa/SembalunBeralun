@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin"
 import { isAdmin } from "@/lib/supabase/get-current-anggota"
 import { Button } from "@/components/ui/button"
 import { DeleteButton } from "@/components/dashboard/delete-button"
+import { FormAlert } from "@/components/dashboard/form-alert"
 import { hapusProker } from "./actions"
 
 const pilarLabel: Record<string, string> = {
@@ -28,6 +29,7 @@ export default async function ProkerDashboardPage() {
 
   return (
     <div>
+      <FormAlert successText="Program kerja berhasil disimpan." />
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold tracking-tight text-foreground">Program Kerja</h1>
         {admin && (

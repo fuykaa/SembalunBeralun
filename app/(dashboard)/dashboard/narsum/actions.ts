@@ -10,6 +10,10 @@ function nullable(val: FormDataEntryValue | null): string | null {
   return val === "" || val === null ? null : String(val)
 }
 
+function errRedirect(path: string, msg: string): never {
+  redirect(path + "?error=" + encodeURIComponent(msg))
+}
+
 export async function tambahLog(formData: FormData) {
   const supabase = await createClient()
   const {
@@ -30,10 +34,10 @@ export async function tambahLog(formData: FormData) {
     created_by: user.id,
   })
 
-  if (error) throw new Error(error.message)
+  if (error) errRedirect("/dashboard/narsum/tambah", error.message)
 
   revalidatePath("/dashboard/narsum")
-  redirect("/dashboard/narsum")
+  redirect("/dashboard/narsum?success=1")
 }
 
 export async function editLog(id: string, formData: FormData) {
@@ -52,7 +56,7 @@ export async function editLog(id: string, formData: FormData) {
     .single()
 
   if (log?.created_by !== user.id && !(await isAdmin())) {
-    throw new Error("Tidak diizinkan.")
+    errRedirect("/dashboard/narsum", "Tidak diizinkan.")
   }
 
   const { error } = await admin
@@ -68,10 +72,10 @@ export async function editLog(id: string, formData: FormData) {
     })
     .eq("id", id)
 
-  if (error) throw new Error(error.message)
+  if (error) errRedirect(`/dashboard/narsum/${id}/edit`, error.message)
 
   revalidatePath("/dashboard/narsum")
-  redirect("/dashboard/narsum")
+  redirect("/dashboard/narsum?success=1")
 }
 
 export async function hapusLog(formData: FormData) {
@@ -91,11 +95,11 @@ export async function hapusLog(formData: FormData) {
     .single()
 
   if (log?.created_by !== user.id && !(await isAdmin())) {
-    throw new Error("Tidak diizinkan.")
+    errRedirect("/dashboard/narsum", "Tidak diizinkan.")
   }
 
   const { error } = await admin.from("log_narsum").delete().eq("id", id)
-  if (error) throw new Error(error.message)
+  if (error) errRedirect("/dashboard/narsum", error.message)
 
   revalidatePath("/dashboard/narsum")
 }

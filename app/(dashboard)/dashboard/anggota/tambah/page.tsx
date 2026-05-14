@@ -3,6 +3,8 @@ import { redirect } from "next/navigation"
 import { isAdmin } from "@/lib/supabase/get-current-anggota"
 import { Button } from "@/components/ui/button"
 import { FotoProfilInput } from "@/components/dashboard/foto-profil-input"
+import { SubmitButton } from "@/components/dashboard/submit-button"
+import { FormAlert } from "@/components/dashboard/form-alert"
 import { tambahAnggota } from "../actions"
 
 const input = "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
@@ -18,6 +20,8 @@ export default async function TambahAnggotaPage() {
         </Button>
         <h1 className="text-2xl font-bold tracking-tight text-foreground">Tambah Anggota</h1>
       </div>
+
+      <FormAlert />
 
       <form action={tambahAnggota} className="flex flex-col gap-5 rounded-xl border border-border bg-background p-6">
         <div className="grid gap-5 sm:grid-cols-2">
@@ -98,7 +102,7 @@ export default async function TambahAnggotaPage() {
         </div>
 
         <div className="flex gap-3 pt-2">
-          <Button type="submit">Simpan Anggota</Button>
+          <SubmitButton>Simpan Anggota</SubmitButton>
           <Button asChild variant="outline">
             <Link href="/dashboard/anggota">Batal</Link>
           </Button>

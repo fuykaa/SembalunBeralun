@@ -1,5 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { SubmitButton } from "@/components/dashboard/submit-button"
+import { FormAlert } from "@/components/dashboard/form-alert"
 import { tambahFotoDesa } from "../actions"
 
 const input =
@@ -15,6 +17,8 @@ export default function TambahFotoDesaPage() {
         </Button>
         <h1 className="text-2xl font-bold tracking-tight text-foreground">Tambah Foto Desa</h1>
       </div>
+
+      <FormAlert />
 
       <form
         action={tambahFotoDesa}
@@ -36,29 +40,17 @@ export default function TambahFotoDesaPage() {
         </div>
 
         <div>
-          <label className={label}>Deskripsi Foto (Alt Text) *</label>
+          <label className={label}>Keterangan Foto *</label>
           <input
-            name="alt"
+            name="keterangan"
             required
             className={input}
             placeholder="Mis: Hamparan ladang bawang merah di lereng Rinjani"
           />
-          <p className="mt-1 text-xs text-muted-foreground">
-            Deskripsi singkat isi foto — digunakan untuk aksesibilitas.
-          </p>
-        </div>
-
-        <div>
-          <label className={label}>Keterangan</label>
-          <input
-            name="keterangan"
-            className={input}
-            placeholder="Keterangan yang ditampilkan di bawah foto (opsional)"
-          />
         </div>
 
         <div className="flex gap-3 pt-2">
-          <Button type="submit">Upload Foto</Button>
+          <SubmitButton>Upload Foto</SubmitButton>
           <Button asChild variant="outline">
             <Link href="/dashboard/galeri-desa">Batal</Link>
           </Button>
