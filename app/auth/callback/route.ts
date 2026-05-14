@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 import { NextResponse } from "next/server"
 
 export async function GET(request: Request) {
@@ -11,16 +12,31 @@ export async function GET(request: Request) {
 
     if (!error && data.user) {
       const email = data.user.email ?? ""
-      const allowedEmails = (process.env.ADMIN_EMAILS ?? "")
+
+      const adminEmails = (process.env.ADMIN_EMAILS ?? "")
         .split(",")
         .map((e) => e.trim())
         .filter(Boolean)
 
-      if (email.endsWith("@mail.ugm.ac.id") || allowedEmails.includes(email)) {
+      if (adminEmails.includes(email)) {
         return NextResponse.redirect(`${origin}/dashboard`)
       }
+
+      if (email.endsWith("@mail.ugm.ac.id")) {
+        const admin = createAdminClient()
+        const { data: anggota } = await admin
+          .from("anggota")
+          .select("id")
+          .eq("email", email)
+          .maybeSingle()
+
+        if (anggota) {
+          return NextResponse.redirect(`${origin}/dashboard`)
+        }
+      }
+
       await supabase.auth.signOut()
-      return NextResponse.redirect(`${origin}/login?error=domain`)
+      return NextResponse.redirect(`${origin}/login?error=not-member`)
     }
   }
 

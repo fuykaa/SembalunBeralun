@@ -2,6 +2,7 @@ import { LoginButton } from "./login-button"
 
 const errorMessages: Record<string, string> = {
   domain: "Hanya akun @mail.ugm.ac.id yang diizinkan masuk.",
+  "not-member": "Akun kamu tidak terdaftar sebagai anggota KKN Sembalun Beralun.",
   auth: "Terjadi kesalahan saat login. Coba lagi.",
 }
 

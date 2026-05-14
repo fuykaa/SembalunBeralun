@@ -53,6 +53,12 @@ export function Navbar() {
               {label}
             </Link>
           ))}
+          <Link
+            href="/login"
+            className="rounded-md border border-border px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:border-foreground hover:text-foreground"
+          >
+            Masuk
+          </Link>
         </nav>
 
         <button
@@ -84,6 +90,15 @@ export function Navbar() {
                 </Link>
               </li>
             ))}
+            <li className="mt-1 border-t border-border pt-1">
+              <Link
+                href="/login"
+                onClick={() => setOpen(false)}
+                className="block rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              >
+                Masuk
+              </Link>
+            </li>
           </ul>
         </nav>
       )}
