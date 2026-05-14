@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server"
 import { createAdminClient } from "@/lib/supabase/admin"
+import { compressProfil } from "@/lib/compress-image"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
@@ -83,13 +84,12 @@ export async function updateProfil(id: string, formData: FormData) {
       if (oldPath) await admin.storage.from("galeri").remove([oldPath])
     }
 
-    const ext = ALLOWED_FOTO_TYPES[file.type]
-    const storagePath = `profil/${crypto.randomUUID()}.${ext}`
-    const bytes = await file.arrayBuffer()
+    const storagePath = `profil/${crypto.randomUUID()}.jpg`
+    const { data: compressed, contentType } = await compressProfil(await file.arrayBuffer(), file.type)
 
     const { error: uploadError } = await admin.storage
       .from("galeri")
-      .upload(storagePath, bytes, { contentType: file.type })
+      .upload(storagePath, compressed, { contentType })
     if (uploadError) throw new Error(uploadError.message)
 
     const { data: { publicUrl } } = admin.storage.from("galeri").getPublicUrl(storagePath)

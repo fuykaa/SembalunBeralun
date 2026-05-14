@@ -57,8 +57,10 @@ export function FotoProfilInput({ currentFoto }: Props) {
     const scaleX = img.naturalWidth / img.width
     const scaleY = img.naturalHeight / img.height
 
-    canvas.width = completedCrop.width
-    canvas.height = completedCrop.height
+    // Output selalu 400×400 — resize sekaligus crop
+    const OUTPUT = 400
+    canvas.width = OUTPUT
+    canvas.height = OUTPUT
 
     ctx.drawImage(
       img,
@@ -68,8 +70,8 @@ export function FotoProfilInput({ currentFoto }: Props) {
       completedCrop.height * scaleY,
       0,
       0,
-      completedCrop.width,
-      completedCrop.height
+      OUTPUT,
+      OUTPUT
     )
 
     canvas.toBlob(
@@ -83,7 +85,7 @@ export function FotoProfilInput({ currentFoto }: Props) {
         if (fileInputRef.current) fileInputRef.current.value = ""
       },
       "image/jpeg",
-      0.92
+      0.85
     )
   }
 

@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { isAdmin } from "@/lib/supabase/get-current-anggota"
+import { compressGaleri } from "@/lib/compress-image"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
@@ -34,10 +35,10 @@ export async function tambahFoto(formData: FormData) {
   const ext = ALLOWED_TYPES[file.type]
   const storagePath = `${crypto.randomUUID()}.${ext}`
 
-  const bytes = await file.arrayBuffer()
+  const { data: compressed, contentType } = await compressGaleri(await file.arrayBuffer(), file.type)
   const { error: uploadError } = await admin.storage
     .from("galeri")
-    .upload(storagePath, bytes, { contentType: file.type })
+    .upload(storagePath, compressed, { contentType })
 
   if (uploadError) throw new Error(uploadError.message)
 
