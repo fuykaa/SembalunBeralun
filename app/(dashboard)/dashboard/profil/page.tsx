@@ -3,6 +3,7 @@ import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { getCurrentAnggota } from "@/lib/supabase/get-current-anggota"
 import { Button } from "@/components/ui/button"
+import { FotoProfilInput } from "@/components/dashboard/foto-profil-input"
 import { updateProfil } from "./actions"
 
 const input =
@@ -84,16 +85,8 @@ export default async function ProfilPage() {
         </div>
 
         <div>
-          <label className={label}>Path Foto</label>
-          <input
-            name="foto_path"
-            defaultValue={anggota.foto_path ?? ""}
-            className={input}
-            placeholder="/images/tim/nama-file.jpg"
-          />
-          <p className="mt-1 text-xs text-muted-foreground">
-            Upload foto ke <code>/public/images/tim/</code> lalu isi path-nya di sini.
-          </p>
+          <label className={label}>Foto Profil</label>
+          <FotoProfilInput currentFoto={anggota.foto_path} />
         </div>
 
         <div className="grid gap-5 sm:grid-cols-3">

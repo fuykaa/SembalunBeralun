@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { isAdmin } from "@/lib/supabase/get-current-anggota"
 import { Button } from "@/components/ui/button"
+import { FotoProfilInput } from "@/components/dashboard/foto-profil-input"
 import { editAnggota } from "../../actions"
 
 const input = "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
@@ -95,9 +96,8 @@ export default async function EditAnggotaPage({
         </div>
 
         <div>
-          <label className={label}>Path Foto</label>
-          <input name="foto_path" defaultValue={anggota.foto_path ?? ""} className={input} placeholder="/images/tim/nama-file.jpg" />
-          <p className="mt-1 text-xs text-muted-foreground">Upload foto ke /public/images/tim/ lalu isi path-nya di sini.</p>
+          <label className={label}>Foto Profil</label>
+          <FotoProfilInput currentFoto={anggota.foto_path} />
         </div>
 
         <div className="grid gap-5 sm:grid-cols-3">

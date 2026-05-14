@@ -69,6 +69,7 @@ export function KartuAnggota({
               alt={`Foto ${anggota.nama}`}
               width={80}
               height={80}
+              unoptimized
               className="size-full object-cover"
             />
           ) : (
