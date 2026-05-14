@@ -11,7 +11,12 @@ export async function GET(request: Request) {
 
     if (!error && data.user) {
       const email = data.user.email ?? ""
-      if (email.endsWith("@mail.ugm.ac.id")) {
+      const allowedEmails = (process.env.ADMIN_EMAILS ?? "")
+        .split(",")
+        .map((e) => e.trim())
+        .filter(Boolean)
+
+      if (email.endsWith("@mail.ugm.ac.id") || allowedEmails.includes(email)) {
         return NextResponse.redirect(`${origin}/dashboard`)
       }
       await supabase.auth.signOut()

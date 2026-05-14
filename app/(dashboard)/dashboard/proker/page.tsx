@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { createAdminClient } from "@/lib/supabase/admin"
+import { isAdmin } from "@/lib/supabase/get-current-anggota"
 import { Button } from "@/components/ui/button"
 import { DeleteButton } from "@/components/dashboard/delete-button"
 import { hapusProker } from "./actions"
@@ -18,7 +19,7 @@ const statusLabel: Record<string, string> = {
 }
 
 export default async function ProkerDashboardPage() {
-  const supabase = createAdminClient()
+  const [supabase, admin] = [createAdminClient(), await isAdmin()]
   const { data: proker } = await supabase
     .from("proker")
     .select("*")
@@ -29,17 +30,19 @@ export default async function ProkerDashboardPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold tracking-tight text-foreground">Program Kerja</h1>
-        <Button asChild size="sm">
-          <Link href="/dashboard/proker/tambah">+ Tambah Proker</Link>
-        </Button>
+        {admin && (
+          <Button asChild size="sm">
+            <Link href="/dashboard/proker/tambah">+ Tambah Proker</Link>
+          </Button>
+        )}
       </div>
 
       {!proker || proker.length === 0 ? (
         <div className="rounded-xl border border-dashed border-border py-16 text-center text-sm text-muted-foreground">
-          Belum ada program kerja. Klik &quot;Tambah Proker&quot; untuk mulai.
+          Belum ada program kerja.
         </div>
       ) : (
-        <div className="rounded-xl border border-border bg-background overflow-hidden">
+        <div className="overflow-hidden rounded-xl border border-border bg-background">
           <table className="w-full text-sm">
             <thead className="border-b border-border bg-muted/50">
               <tr>
@@ -47,7 +50,7 @@ export default async function ProkerDashboardPage() {
                 <th className="hidden px-4 py-3 text-left font-medium text-muted-foreground sm:table-cell">Sub-unit</th>
                 <th className="hidden px-4 py-3 text-left font-medium text-muted-foreground md:table-cell">Pilar</th>
                 <th className="px-4 py-3 text-left font-medium text-muted-foreground">Status</th>
-                <th className="px-4 py-3" />
+                {admin && <th className="px-4 py-3" />}
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -57,14 +60,16 @@ export default async function ProkerDashboardPage() {
                   <td className="hidden px-4 py-3 capitalize text-muted-foreground sm:table-cell">{p.sub_unit}</td>
                   <td className="hidden px-4 py-3 text-muted-foreground md:table-cell">{pilarLabel[p.pilar] ?? p.pilar}</td>
                   <td className="px-4 py-3 text-muted-foreground">{statusLabel[p.status] ?? p.status}</td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center justify-end gap-2">
-                      <Button asChild variant="outline" size="xs">
-                        <Link href={`/dashboard/proker/${p.id}/edit`}>Edit</Link>
-                      </Button>
-                      <DeleteButton action={hapusProker} id={p.id} label={p.nama} />
-                    </div>
-                  </td>
+                  {admin && (
+                    <td className="px-4 py-3">
+                      <div className="flex items-center justify-end gap-2">
+                        <Button asChild variant="outline" size="xs">
+                          <Link href={`/dashboard/proker/${p.id}/edit`}>Edit</Link>
+                        </Button>
+                        <DeleteButton action={hapusProker} id={p.id} label={p.nama} />
+                      </div>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

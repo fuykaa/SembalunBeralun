@@ -1,62 +1,64 @@
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
+import { getCurrentAnggota } from "@/lib/supabase/get-current-anggota"
 import { createAdminClient } from "@/lib/supabase/admin"
-import { isAdmin } from "@/lib/supabase/get-current-anggota"
 import { Button } from "@/components/ui/button"
-import { editProker } from "../../actions"
+import { editProkerSaya } from "../../actions"
 
-const input = "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
+const input =
+  "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
 const label = "block text-sm font-medium text-foreground mb-1"
 
-export default async function EditProkerPage({
+export default async function EditProkerSayaPage({
   params,
 }: {
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-
-  if (!(await isAdmin())) redirect("/dashboard")
+  const anggota = await getCurrentAnggota()
+  if (!anggota) redirect("/dashboard/profil/klaim")
 
   const supabase = createAdminClient()
   const { data: proker } = await supabase
-    .from("proker")
+    .from("proker_anggota")
     .select("*")
     .eq("id", id)
     .single()
 
   if (!proker) notFound()
+  if (proker.anggota_id !== anggota.id) redirect("/dashboard/proker-saya")
 
-  const action = editProker.bind(null, id)
+  const action = editProkerSaya.bind(null, id)
 
   return (
-    <div className="max-w-2xl">
+    <div className="max-w-xl">
       <div className="mb-6 flex items-center gap-3">
         <Button asChild variant="outline" size="sm">
-          <Link href="/dashboard/proker">← Kembali</Link>
+          <Link href="/dashboard/proker-saya">← Kembali</Link>
         </Button>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">Edit Program Kerja</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">Edit Proker</h1>
       </div>
 
-      <form action={action} className="flex flex-col gap-5 rounded-xl border border-border bg-background p-6">
+      <form
+        action={action}
+        className="flex flex-col gap-5 rounded-xl border border-border bg-background p-6"
+      >
         <div>
           <label className={label}>Nama Program Kerja *</label>
           <input name="nama" required defaultValue={proker.nama} className={input} />
         </div>
 
         <div>
-          <label className={label}>Deskripsi *</label>
-          <textarea name="deskripsi" required rows={4} defaultValue={proker.deskripsi} className={input + " resize-none"} />
+          <label className={label}>Deskripsi</label>
+          <textarea
+            name="deskripsi"
+            rows={3}
+            defaultValue={proker.deskripsi ?? ""}
+            className={input + " resize-none"}
+          />
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-3">
-          <div>
-            <label className={label}>Sub-unit *</label>
-            <select name="sub_unit" required defaultValue={proker.sub_unit} className={input}>
-              <option value="sembalun">Sembalun</option>
-              <option value="sajang">Sajang</option>
-              <option value="bersama">Bersama</option>
-            </select>
-          </div>
+        <div className="grid gap-5 sm:grid-cols-2">
           <div>
             <label className={label}>Pilar *</label>
             <select name="pilar" required defaultValue={proker.pilar} className={input}>
@@ -79,7 +81,7 @@ export default async function EditProkerPage({
         <div className="flex gap-3 pt-2">
           <Button type="submit">Simpan Perubahan</Button>
           <Button asChild variant="outline">
-            <Link href="/dashboard/proker">Batal</Link>
+            <Link href="/dashboard/proker-saya">Batal</Link>
           </Button>
         </div>
       </form>

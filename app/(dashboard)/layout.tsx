@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { LayoutDashboard, Users, ClipboardList, ExternalLink, LogOut } from "lucide-react"
+import { LayoutDashboard, Users, ClipboardList, Images, BookOpen, UserCircle, ListChecks, ExternalLink, LogOut } from "lucide-react"
 import { createClient } from "@/lib/supabase/server"
 import { Button } from "@/components/ui/button"
 
@@ -8,6 +8,11 @@ const navLinks = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
   { href: "/dashboard/anggota", label: "Anggota", icon: Users },
   { href: "/dashboard/proker", label: "Program Kerja", icon: ClipboardList },
+  { href: "/dashboard/galeri", label: "Galeri Tim", icon: Images },
+  { href: "/dashboard/galeri-desa", label: "Galeri Desa", icon: Images },
+  { href: "/dashboard/narsum", label: "Log Narsum", icon: BookOpen },
+  { href: "/dashboard/proker-saya", label: "Proker Saya", icon: ListChecks },
+  { href: "/dashboard/profil", label: "Profil Saya", icon: UserCircle },
 ]
 
 async function signOut() {

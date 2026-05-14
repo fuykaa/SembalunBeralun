@@ -1,6 +1,7 @@
 import Link from "next/link"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { createAdminClient } from "@/lib/supabase/admin"
+import { isAdmin } from "@/lib/supabase/get-current-anggota"
 import { Button } from "@/components/ui/button"
 import { editAnggota } from "../../actions"
 
@@ -13,6 +14,9 @@ export default async function EditAnggotaPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
+
+  if (!(await isAdmin())) redirect("/dashboard/profil")
+
   const supabase = createAdminClient()
   const { data: anggota } = await supabase
     .from("anggota")

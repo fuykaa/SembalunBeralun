@@ -3,38 +3,40 @@ import Image from "next/image"
 import { createAdminClient } from "@/lib/supabase/admin"
 
 export const metadata: Metadata = {
-  title: "Galeri | KKN Sembalun Beralun UGM",
+  title: "Desa | KKN Sembalun Beralun UGM",
   description:
-    "Dokumentasi kegiatan KKN Sembalun Beralun UGM di Desa Sembalun dan Desa Sajang.",
+    "Mengenal Desa Sembalun dan Desa Sajang — potensi alam, pertanian, dan daya tarik agrowisata di kaki Gunung Rinjani.",
 }
 
 function PlaceholderFoto() {
   return (
     <div
       className="aspect-square w-full rounded-xl"
-      style={{ background: "var(--gradien-hijau-biru)" }}
+      style={{ background: "var(--gradien-hijau-kuning)" }}
     />
   )
 }
 
-export default async function GaleriPage() {
+export default async function DesaPage() {
   const supabase = createAdminClient()
   const { data: fotos } = await supabase
     .from("galeri")
     .select("id, url, alt, keterangan")
+    .eq("tipe", "desa")
     .order("created_at", { ascending: false })
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-16">
       <div className="mb-12">
         <p className="text-sm font-medium" style={{ color: "var(--hijau-sembalun)" }}>
-          Dokumentasi Kegiatan
+          Mengenal Lokasi KKN
         </p>
         <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-          Galeri
+          Desa Sembalun & Desa Sajang
         </h1>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
-          Momen-momen bersama masyarakat Desa Sembalun dan Desa Sajang.
+        <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
+          Terletak di kaki Gunung Rinjani, Kecamatan Sembalun, Kabupaten Lombok Timur — dua desa
+          dengan potensi pertanian, alam, dan budaya yang luar biasa.
         </p>
       </div>
 

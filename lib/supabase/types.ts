@@ -17,6 +17,17 @@ export type Anggota = {
   instagram: string | null
   linkedin: string | null
   email: string | null
+  user_id: string | null
+  role: "anggota" | "admin"
+}
+
+export type ProkerAnggota = {
+  id: string
+  anggota_id: string
+  nama: string
+  deskripsi: string | null
+  pilar: PilarProker
+  status: StatusProker
 }
 
 export type Proker = {

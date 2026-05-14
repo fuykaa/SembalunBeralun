@@ -1,6 +1,7 @@
 "use server"
 
 import { createAdminClient } from "@/lib/supabase/admin"
+import { isAdmin } from "@/lib/supabase/get-current-anggota"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
@@ -9,6 +10,8 @@ function nullable(val: FormDataEntryValue | null): string | null {
 }
 
 export async function tambahAnggota(formData: FormData) {
+  if (!(await isAdmin())) throw new Error("Tidak diizinkan.")
+
   const supabase = createAdminClient()
 
   const { error } = await supabase.from("anggota").insert({
@@ -35,22 +38,27 @@ export async function tambahAnggota(formData: FormData) {
 }
 
 export async function editAnggota(id: string, formData: FormData) {
+  if (!(await isAdmin())) throw new Error("Tidak diizinkan.")
+
   const supabase = createAdminClient()
 
-  const { error } = await supabase.from("anggota").update({
-    nama: String(formData.get("nama")),
-    nama_panggilan: nullable(formData.get("nama_panggilan")),
-    sub_unit: String(formData.get("sub_unit")),
-    fakultas: String(formData.get("fakultas")),
-    jurusan: String(formData.get("jurusan")),
-    angkatan: parseInt(String(formData.get("angkatan"))),
-    jabatan: nullable(formData.get("jabatan")),
-    foto_path: nullable(formData.get("foto_path")),
-    bio: nullable(formData.get("bio")),
-    instagram: nullable(formData.get("instagram")),
-    linkedin: nullable(formData.get("linkedin")),
-    email: nullable(formData.get("email")),
-  }).eq("id", id)
+  const { error } = await supabase
+    .from("anggota")
+    .update({
+      nama: String(formData.get("nama")),
+      nama_panggilan: nullable(formData.get("nama_panggilan")),
+      sub_unit: String(formData.get("sub_unit")),
+      fakultas: String(formData.get("fakultas")),
+      jurusan: String(formData.get("jurusan")),
+      angkatan: parseInt(String(formData.get("angkatan"))),
+      jabatan: nullable(formData.get("jabatan")),
+      foto_path: nullable(formData.get("foto_path")),
+      bio: nullable(formData.get("bio")),
+      instagram: nullable(formData.get("instagram")),
+      linkedin: nullable(formData.get("linkedin")),
+      email: nullable(formData.get("email")),
+    })
+    .eq("id", id)
 
   if (error) throw new Error(error.message)
 
@@ -60,6 +68,8 @@ export async function editAnggota(id: string, formData: FormData) {
 }
 
 export async function hapusAnggota(formData: FormData) {
+  if (!(await isAdmin())) throw new Error("Tidak diizinkan.")
+
   const supabase = createAdminClient()
   const id = String(formData.get("id"))
 

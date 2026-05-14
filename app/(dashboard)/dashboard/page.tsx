@@ -1,13 +1,20 @@
 import Link from "next/link"
 import { createAdminClient } from "@/lib/supabase/admin"
-import { Users, ClipboardList, ArrowRight } from "lucide-react"
+import { Users, ClipboardList, Images, BookOpen, ArrowRight } from "lucide-react"
 
 export default async function DashboardPage() {
   const supabase = createAdminClient()
 
-  const [{ count: totalAnggota }, { count: totalProker }] = await Promise.all([
+  const [
+    { count: totalAnggota },
+    { count: totalProker },
+    { count: totalFoto },
+    { count: totalNarsum },
+  ] = await Promise.all([
     supabase.from("anggota").select("*", { count: "exact", head: true }),
     supabase.from("proker").select("*", { count: "exact", head: true }),
+    supabase.from("galeri").select("*", { count: "exact", head: true }),
+    supabase.from("log_narsum").select("*", { count: "exact", head: true }),
   ])
 
   const cards = [
@@ -24,6 +31,20 @@ export default async function DashboardPage() {
       icon: ClipboardList,
       href: "/dashboard/proker",
       warna: "var(--biru-sembalun)",
+    },
+    {
+      label: "Foto Galeri",
+      value: totalFoto ?? 0,
+      icon: Images,
+      href: "/dashboard/galeri",
+      warna: "var(--jingga-sembalun)",
+    },
+    {
+      label: "Log Narasumber",
+      value: totalNarsum ?? 0,
+      icon: BookOpen,
+      href: "/dashboard/narsum",
+      warna: "var(--kuning-sembalun)",
     },
   ]
 

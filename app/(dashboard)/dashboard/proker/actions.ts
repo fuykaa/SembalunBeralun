@@ -1,10 +1,13 @@
 "use server"
 
 import { createAdminClient } from "@/lib/supabase/admin"
+import { isAdmin } from "@/lib/supabase/get-current-anggota"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
 export async function tambahProker(formData: FormData) {
+  if (!(await isAdmin())) throw new Error("Tidak diizinkan.")
+
   const supabase = createAdminClient()
 
   const { error } = await supabase.from("proker").insert({
@@ -24,15 +27,20 @@ export async function tambahProker(formData: FormData) {
 }
 
 export async function editProker(id: string, formData: FormData) {
+  if (!(await isAdmin())) throw new Error("Tidak diizinkan.")
+
   const supabase = createAdminClient()
 
-  const { error } = await supabase.from("proker").update({
-    nama: String(formData.get("nama")),
-    deskripsi: String(formData.get("deskripsi")),
-    sub_unit: String(formData.get("sub_unit")),
-    pilar: String(formData.get("pilar")),
-    status: String(formData.get("status")),
-  }).eq("id", id)
+  const { error } = await supabase
+    .from("proker")
+    .update({
+      nama: String(formData.get("nama")),
+      deskripsi: String(formData.get("deskripsi")),
+      sub_unit: String(formData.get("sub_unit")),
+      pilar: String(formData.get("pilar")),
+      status: String(formData.get("status")),
+    })
+    .eq("id", id)
 
   if (error) throw new Error(error.message)
 
@@ -42,6 +50,8 @@ export async function editProker(id: string, formData: FormData) {
 }
 
 export async function hapusProker(formData: FormData) {
+  if (!(await isAdmin())) throw new Error("Tidak diizinkan.")
+
   const supabase = createAdminClient()
   const id = String(formData.get("id"))
 

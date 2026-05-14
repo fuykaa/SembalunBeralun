@@ -10,6 +10,7 @@ const navLinks = [
   { href: "/", label: "Beranda" },
   { href: "/tim", label: "Tim" },
   { href: "/proker", label: "Program Kerja" },
+  { href: "/desa", label: "Desa" },
   { href: "/galeri", label: "Galeri" },
   { href: "/tentang", label: "Tentang" },
 ]
