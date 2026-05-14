@@ -59,7 +59,17 @@ export default async function EditAnggotaPage({
           </div>
           <div>
             <label className={label}>Jabatan</label>
-            <input name="jabatan" defaultValue={anggota.jabatan ?? ""} className={input} />
+            <select name="jabatan" defaultValue={anggota.jabatan ?? ""} className={input}>
+              <option value="">Anggota</option>
+              <option value="Kormanit">Kormanit</option>
+              <option value="Kormasit Sajang">Kormasit Sajang</option>
+              <option value="Kormasit Sembalun">Kormasit Sembalun</option>
+              <option value="Kormater Agro">Kormater Agro</option>
+              <option value="Kormater Medika">Kormater Medika</option>
+              <option value="Kormater Saintek">Kormater Saintek</option>
+              <option value="Kormater Soshum">Kormater Soshum</option>
+              <option value="Anggota (IT)">Anggota (IT)</option>
+            </select>
           </div>
         </div>
 

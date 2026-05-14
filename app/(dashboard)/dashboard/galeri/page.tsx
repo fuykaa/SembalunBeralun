@@ -2,17 +2,16 @@ import Link from "next/link"
 import Image from "next/image"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { createClient } from "@/lib/supabase/server"
-import { getCurrentAnggota } from "@/lib/supabase/get-current-anggota"
+import { isAdmin } from "@/lib/supabase/get-current-anggota"
 import { Button } from "@/components/ui/button"
 import { DeleteButton } from "@/components/dashboard/delete-button"
 import { hapusFoto } from "./actions"
 
 export default async function GaleriDashboardPage() {
-  const [authClient, anggota] = await Promise.all([createClient(), getCurrentAnggota()])
+  const [authClient, admin] = await Promise.all([createClient(), isAdmin()])
   const {
     data: { user },
   } = await authClient.auth.getUser()
-  const admin = anggota?.role === "admin"
 
   const supabase = createAdminClient()
   const { data: fotos } = await supabase
