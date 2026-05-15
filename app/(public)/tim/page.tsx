@@ -9,6 +9,20 @@ export const metadata: Metadata = {
     "Kenali 29 anggota KKN Sembalun Beralun UGM — terbagi dalam Sub-unit Sembalun dan Sub-unit Sajang.",
 }
 
+function jabatanPriority(jabatan: string | null): number {
+  if (!jabatan) return 7
+  const j = jabatan.toLowerCase()
+  if (j.includes("kormanit")) return 1
+  if (j.includes("kormasit")) return 2
+  if (j.includes("sekretaris")) return 3
+  if (j.includes("bendahara")) return 4
+  if (j.includes("kormater")) return 5
+  if (j.startsWith("koor")) return 6
+  if (j.includes("(it)")) return 7
+  if (j.includes("support system")) return 9
+  return 8
+}
+
 const subUnits = [
   { key: "sembalun" as const, label: "Sub-unit Sembalun", desa: "Desa Sembalun" },
   { key: "sajang" as const, label: "Sub-unit Sajang", desa: "Desa Sajang" },
@@ -18,10 +32,7 @@ export default async function TimPage() {
   const supabase = createAdminClient()
 
   const [{ data: anggotaData }, { data: prokerData }] = await Promise.all([
-    supabase
-      .from("anggota")
-      .select("*")
-      .order("jabatan", { ascending: true, nullsFirst: false }),
+    supabase.from("anggota").select("*"),
     supabase.from("proker_anggota").select("*"),
   ])
 
@@ -51,7 +62,9 @@ export default async function TimPage() {
 
       <div className="flex flex-col gap-16">
         {subUnits.map(({ key, label, desa }) => {
-          const anggotaSubUnit = daftarAnggota.filter((a) => a.sub_unit === key)
+          const anggotaSubUnit = daftarAnggota
+            .filter((a) => a.sub_unit === key)
+            .sort((a, b) => jabatanPriority(a.jabatan) - jabatanPriority(b.jabatan))
           return (
             <section key={key}>
               <div className="mb-6 flex items-end justify-between">

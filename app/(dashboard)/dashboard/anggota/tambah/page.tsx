@@ -51,11 +51,19 @@ export default async function TambahAnggotaPage() {
               <option value="Kormanit">Kormanit</option>
               <option value="Kormasit Sajang">Kormasit Sajang</option>
               <option value="Kormasit Sembalun">Kormasit Sembalun</option>
+              <option value="Sekretaris">Sekretaris</option>
+              <option value="Bendahara">Bendahara</option>
               <option value="Kormater Agro">Kormater Agro</option>
               <option value="Kormater Medika">Kormater Medika</option>
               <option value="Kormater Saintek">Kormater Saintek</option>
               <option value="Kormater Soshum">Kormater Soshum</option>
+              <option value="Koor Fundraising">Koor Fundraising</option>
+              <option value="Koor Sponsor">Koor Sponsor</option>
+              <option value="Koor HumPub">Koor HumPub</option>
+              <option value="Koor Media">Koor Media</option>
+              <option value="Koor PerkapLog">Koor PerkapLog</option>
               <option value="Anggota (IT)">Anggota (IT)</option>
+              <option value="Support System">Support System</option>
             </select>
           </div>
         </div>

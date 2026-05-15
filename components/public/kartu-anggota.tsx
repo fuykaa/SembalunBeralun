@@ -79,14 +79,12 @@ export function KartuAnggota({
 
         <div>
           <p className="text-sm font-semibold text-foreground">{anggota.nama}</p>
-          {anggota.jabatan && (
-            <span
-              className="mt-1 inline-block rounded-full px-2 py-0.5 text-xs font-medium"
-              style={jabatanBadgeStyle(anggota.jabatan)}
-            >
-              {anggota.jabatan}
-            </span>
-          )}
+          <span
+            className="mt-1 inline-block rounded-full px-2 py-0.5 text-xs font-medium"
+            style={jabatanBadgeStyle(anggota.jabatan ?? "")}
+          >
+            {anggota.jabatan ?? "Anggota"}
+          </span>
           <p className="mt-1.5 text-xs text-muted-foreground">{anggota.fakultas}</p>
           <p className="text-xs text-muted-foreground">{anggota.jurusan}</p>
         </div>
